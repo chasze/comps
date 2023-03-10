@@ -2,10 +2,21 @@ import { useState } from "react"
 import {GoChevronDown, GoChevronLeft} from 'react-icons/go'
 
 function Accordion( {items} ) {
-    const [expandedIndex, setExpandedIndex] = useState(0);
+    // sttting the defualt state to -1 makes all closed by default 
+    const [expandedIndex, setExpandedIndex] = useState(-1);
 
            const handleClick =  (index) => {
-                    setExpandedIndex(index)
+
+                setExpandedIndex( (currentExpandedIndex) => {
+                    if(currentExpandedIndex === index)
+                    {
+                        return -1;
+                    }
+                    else {
+                        return index;
+                    }
+                } )
+
                 }
 
           
@@ -16,12 +27,12 @@ function Accordion( {items} ) {
         // if the index is equal set isExpanded to true
         const isExpanded = index === expandedIndex
 
-          const icon = <span> 
+          const icon = <span className="text-xl"> 
                 {isExpanded ? <GoChevronDown /> : <GoChevronLeft />}
             </span>
 
         // if  expanded is true render the div otherwise returns false
-        const content = isExpanded && <div>{item.content}</div>
+        const content = isExpanded && <div className="border-p p-5">{item.content}</div>
 
         // if (index === expandedIndex) {
         //     console.log('expanded')
@@ -32,15 +43,16 @@ function Accordion( {items} ) {
  
         return(
             <div key={item.id}>
-                <div onClick={() => handleClick(index)} >
+                <div className="flex p-3 justify-between bg-gray-50 border-b items-center cursor-pointer" onClick={() => handleClick(index)} >
+                    {item.label}
                     {icon}
-                    {item.label}</div>
+                    </div>
                 <div>{content}</div>
 
             </div>
         )
     })
-    return <div>
+    return <div className="border-x border-t rounded">
         {renderedItems}
     </div>
 }
